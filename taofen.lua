@@ -48,6 +48,15 @@ function allPointsFoundInRegionFuzzy(points)--{{{
   end
   return true
 end--}}}
+function allPointsColorMatch(points)--{{{
+  for k, v in ipairs(points) do
+    if v.c ~= getColor(v.p[1], v.p[2]) then
+      dialog(string.format("%d, %d", v.p[1], v.p[2]), 2)
+      return false
+    end
+  end
+  return true
+end--}}}
 function readOneAccount()--{{{
   TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
   line = TBAccounts:read()
@@ -104,9 +113,10 @@ function taofen8()--{{{
     end
   end
 
-  mSleep(1000)
-  x, y = findColorInRegionFuzzy(0xD3B00D, 90, 594, 168, 601, 175)
+  mSleep(1500)
+  x, y = findColorInRegionFuzzy(0xD3B00D, 70, 594, 168, 601, 175)
   if x > 0 then
+    mSleep(500)
     click1(x, y) --hint close button
   end
 
@@ -131,6 +141,31 @@ function taofen8()--{{{
   inputText(password)
   mSleep(500)
   click1(319, 490)
+  mSleep(2000)
+
+  points = {
+    {c=0x788FD1, p={203, 684}},
+    {c=0x788FD1, p={203, 779}},
+    {c=0x788FD1, p={299, 779}},
+    {c=0xEB0A0A, p={299, 686}},
+    {c=0xFFFFFF, p={249, 731}},
+  }
+  if allPointsColorMatch(points) then
+    mSleep(500)
+    click1(249, 731) --fen zhuang
+  end
+
+  points = {
+    {c=0xF73D7F, p={145, 791}},
+    {c=0xF73D7F, p={145, 860}},
+    {c=0xF73D7F, p={493, 791}},
+    {c=0xF73D7F, p={493, 860}},
+    {c=0xFFFFFF, p={283, 833}},
+  }
+  if allPointsColorMatch(points) then
+    mSleep(500)
+    click1(283, 833) --ok, I know
+  end
 end--}}}
 function main()--{{{
   init("0", 0)
