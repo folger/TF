@@ -38,25 +38,36 @@ function vslide1(x, y1, y2, step)--{{{
 end--}}}
 function resetVPN()--{{{
   runApp("com.apple.Preferences")
-  mSleep(3000)
+  mSleep(2000)
   while true do
     x,y = findColorInRegionFuzzy(general_blue, 50, 51, 66, 120, 100)
     if x < 0 then
       break
     end
-    click1(x, y)
+    click1(x, y) --check "Back"
   end
-  click1(320, 10) --click titlebar
-  click1(58, 1084) --click General
-  for i=1, 2 do
+  click1(320, 10) --titlebar
+  click1(58, 1084) --General
+  for i=1, 2 do --slide to the end
     vslide1(300, 950, 150, 10)
     mSleep(700)
   end
-  click1(54, 858)
+  click1(54, 858) --VPN
+end--}}}
+function oneKeyNewMachine()--{{{
+  runApp("org.ioshack.iGrimace")
+  mSleep(2000)
+  click1(237, 427) --program list
+  click1(566, 82) --select all
+  click1(38, 83) --back
+  click1(475, 820) --one key new machine
+  mSleep(2000)
+  click1(475, 956) --quit
 end--}}}
 function main()--{{{
   init("0", 0)
   resetVPN()
+  oneKeyNewMachine()
 end--}}}
 
 main()
