@@ -1,65 +1,62 @@
+general_blue = 0x007AFF
 function click(p, x, y)--{{{
   touchDown(p, x, y)
   mSleep(50)
   touchUp(p, x, y)
+  mSleep(1000)
 end --}}}
 function click1(x, y)--{{{
   click(1, x, y)
 end--}}}
-function slide(x1, y1, x2, y2, msleep, offset)--{{{
-  do
-    x3 = 0
-    y3 = 0
-    touchDown(1, x1, y1)
-    xx = x1
-    yy = y1
-    while true do
-      if x2 < x1 and x3 == 0 then
-        xx = xx - offset
-        if x2 > xx then
-          x3 = 1
-        end
-      elseif x3 == 0 then
-        xx = xx + offset
-        if x2 < xx then
-          x3 = 1
-        end
-      end
-      if y2 < y1 and y3 == 0 then
-        yy = yy - offset
-        if y2 > yy then
-          y3 = 1
-        end
-      elseif y3 == 0 then
-        yy = yy + offset
-        if y2 < yy then
-          y3 = 1
-        end
-      end
-      if x3 ~= 1 or y3 ~= 1 then
-        mSleep(msleep)
-        touchMove(1, xx, yy)
-        break
-      end
-    end
-    touchUp(1)
-    mSleep(100)
+function touch(func, p, x, y, vertical)--{{{
+  if vertical then
+    func(p, x, y)
+  else
+    func(p, y, x)
   end
+end--}}}
+function slide(p, x, y1, y2, vertical, step)--{{{
+  touch(touchDown, p, x, y1, vertical)
+  mSleep(500)
+  if step > 0 then
+    if y1 > y2 then
+      step = -step
+    end
+    count = (y2 - y1) / step
+    for i=1,count do
+      touch(touchMove, p, x, y1 + i * step, vertical)
+      mSleep(30)
+    end
+  else
+    touch(touchMove, p, x, y2, vertical)
+    mSleep(500)
+  end
+  touch(touchUp, p, x, y2, vertical)
+end--}}}
+function vslide1(x, y1, y2, step)--{{{
+  slide(1, x, y1, y2, true, step)
+end--}}}
+function resetVPN()--{{{
+  runApp("com.apple.Preferences")
+  mSleep(3000)
+  while true do
+    x,y = findColorInRegionFuzzy(general_blue, 50, 51, 66, 120, 100)
+    if x < 0 then
+      break
+    end
+    click1(x, y)
+  end
+  click1(320, 10) --click titlebar
+  click1(58, 1084) --click General
+  for i=1, 2 do
+    vslide1(300, 950, 150, 10)
+    mSleep(700)
+  end
+  click1(54, 858)
 end--}}}
 function main()--{{{
   init("0", 0)
-  runApp("com.apple.Preferences")
-  for i=1, 5 do
-    click1(75, 85)
-    mSleep(200)
-  end
-  mSleep(2000)
-  click1(320, 10)
-  mSleep(1000)
-  while true do
-    slide(300, 950, 300, 150, 1000, 10)
-    mSleep(700)
-  end
+  resetVPN()
 end--}}}
 
 main()
