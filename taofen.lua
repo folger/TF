@@ -36,9 +36,30 @@ end--}}}
 function vslide1(x, y1, y2, step)--{{{
   slide(1, x, y1, y2, true, step)
 end--}}}
+function hslide1(x1, x2, y, step)--{{{
+  slide(1, y, x1, x2, false, step)
+end--}}}
+function allPointsFoundInRegionFuzzy(points)--{{{
+  for k, v in ipairs(points) do
+    x, y = findColorInRegionFuzzy(v.c, 100, v.p[1], v.p[2], v.p[3], v.p[4])
+    if x < 0 then
+      return false
+    end
+  end
+  return true
+end--}}}
+function readOneAccount()--{{{
+  TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
+  line = TBAccounts:read()
+  comma = string.find(line, ",")
+  username = string.sub(line, 0, comma-1)
+  password = string.sub(line, comma+1)
+  TBAccounts:close()
+  return username, password
+end--}}}
 function resetVPN()--{{{
   runApp("com.apple.Preferences")
-  mSleep(2000)
+  mSleep(3000)
   while true do
     x,y = findColorInRegionFuzzy(general_blue, 50, 51, 66, 120, 100)
     if x < 0 then
@@ -56,7 +77,7 @@ function resetVPN()--{{{
 end--}}}
 function oneKeyNewMachine()--{{{
   runApp("org.ioshack.iGrimace")
-  mSleep(2000)
+  mSleep(3000)
   click1(237, 427) --program list
   click1(566, 82) --select all
   click1(38, 83) --back
@@ -64,10 +85,58 @@ function oneKeyNewMachine()--{{{
   mSleep(2000)
   click1(475, 956) --quit
 end--}}}
+function taofen8()--{{{
+  runApp("com.taofen8.TfClient")
+  mSleep(3000)
+
+  while true do
+    hslide1(600, 100, 500, -1)
+    mSleep(2000)
+    points = {
+      {c=0xFFFFFF, p={221, 997, 262, 1036}},
+      {c=0xFFFFFF, p={264, 997, 304, 1036}},
+      {c=0xFFFFFF, p={305, 997, 348, 1036}},
+      {c=0xFFFFFF, p={349, 997, 389, 1036}},
+    }
+    if allPointsFoundInRegionFuzzy(points) then
+      click1(300, 1000) --try now
+      break
+    end
+  end
+
+  mSleep(1000)
+  x, y = findColorInRegionFuzzy(0xD3B00D, 90, 594, 168, 601, 175)
+  if x > 0 then
+    click1(x, y) --hint close button
+  end
+
+  mSleep(1000)
+  click1(62, 465) --login
+
+  for i=1,100 do
+    mSleep(500)
+    x,y = findColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209)
+    if x > 0 then
+      break
+    end
+  end
+
+  username, password = readOneAccount()
+
+  mSleep(500)
+  click1(113, 279)
+  inputText(username)
+  mSleep(500)
+  click1(319, 369)
+  inputText(password)
+  mSleep(500)
+  click1(319, 490)
+end--}}}
 function main()--{{{
   init("0", 0)
-  resetVPN()
+  --resetVPN()
   oneKeyNewMachine()
+  taofen8()
 end--}}}
 
 main()
