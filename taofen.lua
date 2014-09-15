@@ -67,6 +67,17 @@ function allPointsColorMatch(points)--{{{
   return true
 end
 --}}}
+function doFindColorInRegionFuzzy(color, degree, x1, y1, x2, y2, times)--{{{
+  for i=1,times do
+    mSleep(500)
+    x,y = findColorInRegionFuzzy(color, degree, x1, y1, x2, y2)
+    if x > 0 then
+      return true
+    end
+  end
+  return false
+end
+--}}}
 function readOneAccount()--{{{
   TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
   line = TBAccounts:read()
@@ -127,23 +138,20 @@ function taofen8()--{{{
   end
 
   mSleep(1500)
-  x, y = findColorInRegionFuzzy(0xD3B00D, 70, 594, 168, 601, 175)
-  if x > 0 then
+  if doFindColorInRegionFuzzy(0xD3B00D, 70, 594, 168, 601, 175, 3) then
     mSleep(500)
-    click1(x, y) --hint close button
+    click1(x, y)
   end
 
   mSleep(1000)
   click1(62, 465) --login
+  mSleep(1000)
 
-  for i=1,100 do
-    mSleep(500)
-    x,y = findColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209)
-    if x > 0 then
-      break
-    end
+  if not doFindColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209, 10) then
+    dialog("fail to load taobao login page", 5)
+    return
   end
-
+    
   username, password = readOneAccount()
 
   mSleep(500)
