@@ -1,20 +1,25 @@
+--constants{{{
 general_blue = 0x007AFF
+--}}}
 function click(p, x, y)--{{{
   touchDown(p, x, y)
   mSleep(50)
   touchUp(p, x, y)
   mSleep(1000)
-end --}}}
+end
+--}}}
 function click1(x, y)--{{{
   click(1, x, y)
-end--}}}
+end
+--}}}
 function touch(func, p, x, y, vertical)--{{{
   if vertical then
     func(p, x, y)
   else
     func(p, y, x)
   end
-end--}}}
+end
+--}}}
 function slide(p, x, y1, y2, vertical, step)--{{{
   touch(touchDown, p, x, y1, vertical)
   mSleep(500)
@@ -32,13 +37,16 @@ function slide(p, x, y1, y2, vertical, step)--{{{
     mSleep(500)
   end
   touch(touchUp, p, x, y2, vertical)
-end--}}}
+end
+--}}}
 function vslide1(x, y1, y2, step)--{{{
   slide(1, x, y1, y2, true, step)
-end--}}}
+end
+--}}}
 function hslide1(x1, x2, y, step)--{{{
   slide(1, y, x1, x2, false, step)
-end--}}}
+end
+--}}}
 function allPointsFoundInRegionFuzzy(points)--{{{
   for k, v in ipairs(points) do
     x, y = findColorInRegionFuzzy(v.c, 100, v.p[1], v.p[2], v.p[3], v.p[4])
@@ -47,7 +55,8 @@ function allPointsFoundInRegionFuzzy(points)--{{{
     end
   end
   return true
-end--}}}
+end
+--}}}
 function allPointsColorMatch(points)--{{{
   for k, v in ipairs(points) do
     if v.c ~= getColor(v.p[1], v.p[2]) then
@@ -56,7 +65,8 @@ function allPointsColorMatch(points)--{{{
     end
   end
   return true
-end--}}}
+end
+--}}}
 function readOneAccount()--{{{
   TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
   line = TBAccounts:read()
@@ -65,7 +75,8 @@ function readOneAccount()--{{{
   password = string.sub(line, comma+1)
   TBAccounts:close()
   return username, password
-end--}}}
+end
+--}}}
 function resetVPN()--{{{
   runApp("com.apple.Preferences")
   mSleep(3000)
@@ -83,7 +94,8 @@ function resetVPN()--{{{
     mSleep(700)
   end
   click1(54, 858) --VPN
-end--}}}
+end
+--}}}
 function oneKeyNewMachine()--{{{
   runApp("org.ioshack.iGrimace")
   mSleep(3000)
@@ -93,7 +105,8 @@ function oneKeyNewMachine()--{{{
   click1(475, 820) --one key new machine
   mSleep(2000)
   click1(475, 956) --quit
-end--}}}
+end
+--}}}
 function taofen8()--{{{
   runApp("com.taofen8.TfClient")
   mSleep(3000)
@@ -166,12 +179,14 @@ function taofen8()--{{{
     mSleep(500)
     click1(283, 833) --ok, I know
   end
-end--}}}
+end
+--}}}
 function main()--{{{
   init("0", 0)
   --resetVPN()
   oneKeyNewMachine()
   taofen8()
-end--}}}
+end
+--}}}
 
 main()
