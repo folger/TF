@@ -60,7 +60,6 @@ end
 function allPointsColorMatch(points)--{{{
   for k, v in ipairs(points) do
     if v.c ~= getColor(v.p[1], v.p[2]) then
-      dialog(string.format("%d, %d", v.p[1], v.p[2]), 2)
       return false
     end
   end
@@ -118,6 +117,17 @@ function oneKeyNewMachine()--{{{
   click1(475, 956) --quit
 end
 --}}}
+function prepareTasks(tasks)--{{{
+  for k, v in ipairs(tasks) do
+    if not v.found then
+      x, y = findImageInRegionFuzzy(v.image, 50, 5, 135, 111, 1135, 0xFFFFFF)
+      if x > 0 then
+        v.found = true
+      end
+    end
+  end
+end
+--}}}
 function taofen8()--{{{
   runApp("com.taofen8.TfClient")
   mSleep(3000)
@@ -137,17 +147,21 @@ function taofen8()--{{{
     end
   end
 
+  ::click_close::
   mSleep(1500)
   if doFindColorInRegionFuzzy(0xD3B00D, 70, 594, 168, 601, 175, 3) then
     mSleep(500)
     click1(x, y)
+  else
+    vslide1(200, 150, 950, 10)
+    mSleep(2000)
   end
 
   mSleep(1000)
   click1(62, 465) --login
   mSleep(1000)
 
-  if not doFindColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209, 10) then
+  if not doFindColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209, 25) then
     dialog("fail to load taobao login page", 5)
     return
   end
@@ -162,7 +176,7 @@ function taofen8()--{{{
   inputText(password)
   mSleep(500)
   click1(319, 490)
-  mSleep(2000)
+  mSleep(3000)
 
   points = {
     {c=0x788FD1, p={203, 684}},
@@ -186,6 +200,15 @@ function taofen8()--{{{
   if allPointsColorMatch(points) then
     mSleep(500)
     click1(283, 833) --ok, I know
+  end
+
+  tasks = {
+    {image="nuomi.png", found=false},
+  }
+  for i=1,10 do
+    prepareTasks(tasks)
+    vslide1(200, 950, 150, 10)
+    mSleep(2000)
   end
 end
 --}}}
