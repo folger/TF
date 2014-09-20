@@ -88,26 +88,26 @@ function resetVPN()--{{{
     if x < 0 then
       break
     end
-    click1(x, y) --check "Back"
+    click1(x, y) -- check "Back"
   end
-  click1(320, 10) --titlebar
-  click1(58, 1084) --General
-  for i=1, 2 do --slide to the end
+  click1(320, 10) -- titlebar
+  click1(58, 1084) -- General
+  for i=1, 2 do -- slide to the end
     vslide1(300, 950, 150, 10)
     mSleep(700)
   end
-  click1(54, 858) --VPN
+  click1(54, 858) -- VPN
 end
 --}}}
 function oneKeyNewMachine()--{{{
   runApp("org.ioshack.iGrimace")
   mSleep(3000)
-  click1(237, 427) --program list
-  click1(566, 82) --select all
-  click1(38, 83) --back
-  click1(475, 820) --one key new machine
+  click1(237, 427) -- program list
+  click1(566, 82) -- select all
+  click1(38, 83) -- back
+  click1(475, 820) -- one key new machine
   mSleep(2000)
-  click1(475, 956) --quit
+  click1(475, 956) -- quit
 end
 --}}}
 function prepareTasks(tasks)--{{{
@@ -117,14 +117,14 @@ function prepareTasks(tasks)--{{{
       if x > 0 then
         v.found = true
         click1(x, y)
-        click1(317, 747) --start task
+        click1(317, 747) -- start task
         mSleep(5000)
-        if allPointsInRegionColorMatch(0x007AFF, 583, 324, 585, 351) then --download cloud
+        if allPointsInRegionColorMatch(0x007AFF, 583, 324, 585, 351) then -- download cloud
           click1(583, 324)
-          while true do --downloading
+          while true do -- downloading
             mSleep(1000)
             resetIDLETimer()
-            if allPointsInRegionColorMatch(0x007AFF, 581, 324, 582, 343) then --open button
+            if allPointsInRegionColorMatch(0x007AFF, 581, 324, 582, 343) then -- open button
               break
             end
           end
@@ -145,7 +145,7 @@ function taofen8()--{{{
     mSleep(2000)
     x,y = findMultiColorInRegionFuzzy(0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056)
     if x > 0 then
-      click1(300, 1000) --try now
+      click1(300, 1000) -- try now
       break
     end
   end
@@ -156,7 +156,7 @@ function taofen8()--{{{
   end
 
   mSleep(1000)
-  click1(62, 465) --login
+  click1(62, 465) -- login
   mSleep(1000)
 
   if not doFindColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209, 25) then
@@ -177,12 +177,12 @@ function taofen8()--{{{
 
   x, y = findMultiColorInRegionFuzzy(0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788)
   if x > 0 then
-    click1(249, 731) --fen zhuang
+    click1(249, 731) -- fen zhuang
   end
 
   x, y = findMultiColorInRegionFuzzy(0xf73d7f, "93|36|0xffffff,139|44|0xffffff,202|37|0xffffff", 100, 141, 788, 498, 863)
   if x > 0 then
-    click1(283, 833) --ok, I know
+    click1(283, 833) -- ok, I know
   end
 
   tasks = {
