@@ -88,7 +88,7 @@ function resetVPN()--{{{
   runApp("com.apple.Preferences")
   mSleep(3000)
   while true do
-    x,y = findColorInRegionFuzzy(0x007aff, 50, 51, 66, 120, 100)
+    x,y = findColorInRegionFuzzy(general_blue, 50, 51, 66, 120, 100)
     if x < 0 then
       break
     end
@@ -123,12 +123,12 @@ function prepareTasks(tasks)--{{{
         click1(x, y)
         click1(317, 747) -- start task
         mSleep(5000)
-        if allPointsInRegionColorMatch(0x007aff, 583, 324, 585, 351) then -- download cloud
+        if allPointsInRegionColorMatch(general_blue, 583, 324, 585, 351) then -- download cloud
           click1(583, 324)
           while true do -- downloading
             mSleep(1000)
             resetIDLETimer()
-            if allPointsInRegionColorMatch(0x007aff, 581, 324, 582, 343) then -- open button
+            if allPointsInRegionColorMatch(general_blue, 581, 324, 582, 343) then -- open button
               break
             end
           end
@@ -155,11 +155,6 @@ function nuomi()--{{{
   while true do
     hslide1(600, 100, 500, 50)
     mSleep(2000)
-    --x,y = findMultiColorInRegionFuzzy(0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056)
-    --if x > 0 then
-      --click1(x, y) -- try now
-      --break
-    --end
   end
 end--}}}
 function gaode()--{{{
@@ -236,9 +231,9 @@ end
 --}}}
 function main()--{{{
   init("0", 0)
-  --resetVPN()
-  --oneKeyNewMachine()
-  --taofen8()
+  resetVPN()
+  oneKeyNewMachine()
+  taofen8()
   nuomi()
 end
 --}}}
