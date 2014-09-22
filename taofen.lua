@@ -80,11 +80,15 @@ function readOneAccount()--{{{
   return username, password
 end
 --}}}
+function killAppleMsgs()--{{{
+  click1(200, 660) -- possible apple msg
+  click1(400, 660) -- possible apple msg
+end--}}}
 function resetVPN()--{{{
   runApp("com.apple.Preferences")
   mSleep(3000)
   while true do
-    x,y = findColorInRegionFuzzy(general_blue, 50, 51, 66, 120, 100)
+    x,y = findColorInRegionFuzzy(0x007aff, 50, 51, 66, 120, 100)
     if x < 0 then
       break
     end
@@ -119,12 +123,12 @@ function prepareTasks(tasks)--{{{
         click1(x, y)
         click1(317, 747) -- start task
         mSleep(5000)
-        if allPointsInRegionColorMatch(0x007AFF, 583, 324, 585, 351) then -- download cloud
+        if allPointsInRegionColorMatch(0x007aff, 583, 324, 585, 351) then -- download cloud
           click1(583, 324)
           while true do -- downloading
             mSleep(1000)
             resetIDLETimer()
-            if allPointsInRegionColorMatch(0x007AFF, 581, 324, 582, 343) then -- open button
+            if allPointsInRegionColorMatch(0x007aff, 581, 324, 582, 343) then -- open button
               break
             end
           end
@@ -136,23 +140,49 @@ function prepareTasks(tasks)--{{{
   end
 end
 --}}}
+function nuomi()--{{{
+  runApp("com.renren-inc.nuomi")
+  mSleep(5000)
+  while true do
+    x, y = findMultiColorInRegionFuzzy(0xffdae0, "250|24|0xe5c0a1,332|63|0xffdae0,380|41|0xe5e5e5", 100, 50, 314, 582, 691)
+    if x > 0 then
+      break
+    end
+    killAppleMsgs()
+    mSleep(2000)
+  end
+
+  while true do
+    hslide1(600, 100, 500, 50)
+    mSleep(2000)
+    --x,y = findMultiColorInRegionFuzzy(0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056)
+    --if x > 0 then
+      --click1(x, y) -- try now
+      --break
+    --end
+  end
+end--}}}
+function gaode()--{{{
+end--}}}
+function zhuche()--{{{
+end--}}}
 function taofen8()--{{{
   runApp("com.taofen8.TfClient")
   mSleep(3000)
 
   while true do
-    hslide1(600, 100, 500, -1)
+    hslide1(600, 100, 500, 50)
     mSleep(2000)
     x,y = findMultiColorInRegionFuzzy(0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056)
     if x > 0 then
-      click1(300, 1000) -- try now
+      click1(x, y) -- try now
       break
     end
   end
 
   mSleep(1500)
   if doFindColorInRegionFuzzy(0xD3B00D, 70, 594, 168, 601, 175, 3) then
-    click1(x, y)
+    click1(x, y) -- close button
   end
 
   mSleep(1000)
@@ -170,38 +200,46 @@ function taofen8()--{{{
 
   click1(113, 279)
   inputText(username)
+  mSleep(1000)
   click1(319, 369)
   inputText(password)
+  mSleep(1000)
   click1(319, 490)
-  mSleep(3000)
+  mSleep(5000)
 
   x, y = findMultiColorInRegionFuzzy(0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788)
   if x > 0 then
-    click1(249, 731) -- fen zhuang
+    click1(x, y) -- fen zhuang
   end
 
   x, y = findMultiColorInRegionFuzzy(0xf73d7f, "93|36|0xffffff,139|44|0xffffff,202|37|0xffffff", 100, 141, 788, 498, 863)
   if x > 0 then
-    click1(283, 833) -- ok, I know
+    click1(x, y) -- ok, I know
   end
 
   tasks = {
-    {name="nuomi", color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
-    {name="gaode", color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
-    {name="zhuche", color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
+    {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
+    {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
+    {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
   }
-  for i=1,5 do
+  for i=1,2 do
     prepareTasks(tasks)
     vslide1(200, 950, 150, 10)
     mSleep(2000)
+  end
+  for k,v in ipairs(tasks) do
+    if v.found then
+      v.func()
+    end
   end
 end
 --}}}
 function main()--{{{
   init("0", 0)
   --resetVPN()
-  oneKeyNewMachine()
-  taofen8()
+  --oneKeyNewMachine()
+  --taofen8()
+  nuomi()
 end
 --}}}
 
