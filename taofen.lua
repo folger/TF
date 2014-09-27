@@ -173,7 +173,7 @@ end
 function zhuche()--{{{
 end
 --}}}
-function taofen8(username, password)--{{{
+function taofen8(tasks, username, password)--{{{
   runApp("com.taofen8.TfClient")
 
   doFindMultiColorInRegionFuzzy(true, 0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056, nil, generalHSlide)
@@ -215,14 +215,9 @@ function taofen8(username, password)--{{{
 
   mSleep(1000)
 
-  tasks = {
-    {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
-    {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
-    {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
-  }
   for i=1,3 do
     prepareTasks(tasks)
-    vslide1(200, 500, 150, 50)
+    vslide1(200, 500, 150, 40)
     mSleep(2000)
   end
   for k,v in ipairs(tasks) do
@@ -235,33 +230,72 @@ end
 function main()--{{{
   init("0", 0)
 
-  TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
-  first = true
-  while true do
-    line = TBAccounts:read()
-    if not line then
-      dialog("all suers finished", 5)
-      break
-    end
-    comma = string.find(line, ",")
-    username = string.sub(line, 0, comma-1)
-    password = string.sub(line, comma+1)
+  ret, check_1 = showUI("{\
+    \"style\": \"default\",\
+    \"config\": \"save_taofen8.dat\",\
+    \"views\": [\
+      {\
+        \"type\": \"Label\",\
+        \"text\": \"任务\",\
+        \"size\": 25,\
+        \"align\": \"center\",\
+        \"color\": \"0,0,255\",\
+      },\
+      {\
+        \"type\": \"CheckBoxGroup\",\
+        \"list\": \"百度糯米,高德地图,神舟租车\"\
+      }\
+    ]}")
 
-    if not first then
-      secs = 5
-      dialogRet(string.format("Next user is %s, please wait %d secs", username, secs), "Start Now", 0, 0, secs)
-    else
-      first = false
+  if ret == 1 and #check_1 ~= 0 then
+    alltasks = {
+      {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
+      {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
+      {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
+    }
+    tasks = {}
+    pos = 0
+    while true do
+      at = string.find(check_1, "@", pos)
+      if not at then
+        table.insert(tasks, alltasks[tonumber(string.sub(check_1, pos)) + 1])
+        break
+      end
+      table.insert(tasks, alltasks[tonumber(string.sub(check_1, pos, at - 1)) + 1])
+      pos = at + 1
     end
-    --oneKeyNewPhone()
-    --resetVPN()
-    oneKeyNewPhone()
-    taofen8(username, password)
-    pressHomeKey(0)
-    pressHomeKey(1)
+
+    TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
+    first = true
+    while true do
+      line = TBAccounts:read()
+      if not line then
+        dialog("all suers finished", 5)
+        break
+      end
+      comma = string.find(line, ",")
+      username = string.sub(line, 0, comma-1)
+      password = string.sub(line, comma+1)
+
+      if not first then
+        secs = 5
+        dialogRet(string.format("Next user is %s, please wait %d secs", username, secs), "Start Now", 0, 0, secs)
+      else
+        first = false
+      end
+      for k, v in ipairs(tasks) do
+        v.found = false
+      end
+
+      --oneKeyNewPhone()
+      --resetVPN()
+      oneKeyNewPhone()
+      taofen8(tasks, username, password)
+      pressHomeKey(0)
+      pressHomeKey(1)
+    end
+    TBAccounts:close()
   end
-  TBAccounts:close()
 end
 --}}}
-
 main()
