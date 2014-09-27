@@ -87,16 +87,6 @@ function doFindMultiColorInRegionFuzzy(iffound, color, posandcolor, degree, x1, 
   return false
 end
 --}}}
-function readOneAccount()--{{{
-  TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
-  line = TBAccounts:read()
-  comma = string.find(line, ",")
-  username = string.sub(line, 0, comma-1)
-  password = string.sub(line, comma+1)
-  TBAccounts:close()
-  return username, password
-end
---}}}
 function resetVPN()--{{{
   runApp("com.apple.Preferences")
   mSleep(2000)
@@ -132,7 +122,7 @@ function prepareTasks(tasks)--{{{
         v.found = true
         click1(x, y)
         click1(317, 747) -- start task
-        mSleep(5000)
+        doFindMultiColorInRegionFuzzy(true, 0x8a8a8a, "47|23|0xa6a6a6,66|3|0xe8e8e8", 100, 73, 401, 152, 427)
         if allPointsInRegionColorMatch(general_blue, 583, 324, 585, 351) then -- download cloud
           click1(583, 324)
           while true do -- downloading
@@ -162,7 +152,6 @@ end
 --}}}
 function nuomi()--{{{
   runApp("com.renren-inc.nuomi")
-  mSleep(2000)
 
   doFindMultiColorInRegionFuzzy(true, 0xffdae0, "250|24|0xe5c0a1,332|63|0xffdae0,380|41|0xe5e5e5", 100, 50, 314, 582, 691)
 
@@ -174,6 +163,8 @@ function nuomi()--{{{
 
   doFindMultiColorInRegionFuzzy(true, 0xff93af, "9|10|0xffd7e1", 100, 283, 444, 296, 461)
   click1(284, 446) -- first food
+
+  mSleep(1000)
 end
 --}}}
 function gaode()--{{{
@@ -182,9 +173,8 @@ end
 function zhuche()--{{{
 end
 --}}}
-function taofen8()--{{{
+function taofen8(username, password)--{{{
   runApp("com.taofen8.TfClient")
-  mSleep(2000)
 
   doFindMultiColorInRegionFuzzy(true, 0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056, nil, generalHSlide)
   click1(236, 1005) -- try now
@@ -205,10 +195,6 @@ function taofen8()--{{{
     return
   end
 
-  mSleep(1000)
-    
-  username, password = readOneAccount()
-
   click1(113, 279)
   mSleep(1000)
   inputText(username)
@@ -217,8 +203,12 @@ function taofen8()--{{{
   inputText(password)
   click1(319, 490)
 
-  doFindMultiColorInRegionFuzzy(true, 0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788)
-  click1(245, 726) -- fen zhuang
+  if doFindMultiColorInRegionFuzzy(true, 0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788, 20) then
+    click1(245, 726) -- fen zhuang
+  else
+    dialog("Cannot find fen zhuang, try next user", 3)
+    return
+  end
 
   doFindMultiColorInRegionFuzzy(true, 0xf73d7f, "93|36|0xffffff,139|44|0xffffff,202|37|0xffffff", 100, 141, 788, 498, 863)
   click1(244, 820) -- ok, I know
@@ -244,10 +234,33 @@ end
 --}}}
 function main()--{{{
   init("0", 0)
-  --oneKeyNewPhone()
-  --resetVPN()
-  oneKeyNewPhone()
-  taofen8()
+
+  TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
+  first = true
+  while true do
+    line = TBAccounts:read()
+    if not line then
+      dialog("all suers finished", 5)
+      break
+    end
+    comma = string.find(line, ",")
+    username = string.sub(line, 0, comma-1)
+    password = string.sub(line, comma+1)
+
+    if not first then
+      secs = 5
+      dialogRet(string.format("Next user is %s, please wait %d secs", username, secs), "Start Now", 0, 0, secs)
+    else
+      first = false
+    end
+    --oneKeyNewPhone()
+    --resetVPN()
+    oneKeyNewPhone()
+    taofen8(username, password)
+    pressHomeKey(0)
+    pressHomeKey(1)
+  end
+  TBAccounts:close()
 end
 --}}}
 
