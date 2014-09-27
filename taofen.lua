@@ -6,7 +6,7 @@ function click(p, x, y)--{{{
   touchDown(p, x, y)
   mSleep(50)
   touchUp(p, x, y)
-  mSleep(1000)
+  mSleep(500)
 end
 --}}}
 function click1(x, y)--{{{
@@ -60,11 +60,28 @@ function allPointsInRegionColorMatch(color, x1, y1, x2, y2)--{{{
 end
 --}}}
 function doFindColorInRegionFuzzy(color, degree, x1, y1, x2, y2, times)--{{{
-  for i=1,times do
+  return doFindMultiColorInRegionFuzzy(true, color, nil, degree, x1, y1, x2, y2, times)
+end
+--}}}
+function doFindMultiColorInRegionFuzzy(iffound, color, posandcolor, degree, x1, y1, x2, y2, times, notFoundFunc)--{{{
+  if not times then
+    times = 10000
+  end
+  for i=1, times do
     mSleep(500)
-    x,y = findColorInRegionFuzzy(color, degree, x1, y1, x2, y2)
+    if posandcolor then
+      x, y = findMultiColorInRegionFuzzy(color, posandcolor, degree, x1, y1, x2, y2)
+    else
+      x, y = findColorInRegionFuzzy(color, degree, x1, y1, x2, y2)
+    end
+    if not iffound then
+      x = -x
+    end
     if x > 0 then
       return true
+    end
+    if notFoundFunc then
+      notFoundFunc()
     end
   end
   return false
@@ -80,13 +97,9 @@ function readOneAccount()--{{{
   return username, password
 end
 --}}}
-function killAppleMsgs()--{{{
-  click1(200, 660) -- possible apple msg
-  click1(400, 660) -- possible apple msg
-end--}}}
 function resetVPN()--{{{
   runApp("com.apple.Preferences")
-  mSleep(3000)
+  mSleep(2000)
   while true do
     x,y = findColorInRegionFuzzy(general_blue, 50, 51, 66, 120, 100)
     if x < 0 then
@@ -95,22 +108,19 @@ function resetVPN()--{{{
     click1(x, y) -- check "Back"
   end
   click1(320, 10) -- titlebar
-  click1(58, 1084) -- General
-  for i=1, 2 do -- slide to the end
-    vslide1(300, 950, 150, 10)
-    mSleep(700)
-  end
-  click1(54, 858) -- VPN
+  click1(531, 319) -- close VPN
+  mSleep(1000)
+  click1(580, 319) -- open VPN
 end
 --}}}
-function oneKeyNewMachine()--{{{
+function oneKeyNewPhone()--{{{
   runApp("org.ioshack.iGrimace")
-  mSleep(3000)
-  click1(237, 427) -- program list
-  click1(566, 82) -- select all
-  click1(38, 83) -- back
+  doFindColorInRegionFuzzy(0x942be9, 100, 326, 545, 332, 560)
+  --click1(237, 427) -- program list
+  --click1(566, 82) -- select all
+  --click1(38, 83) -- back
   click1(475, 820) -- one key new machine
-  mSleep(2000)
+  doFindColorInRegionFuzzy(0x942be9, 100, 326, 545, 332, 560)
   click1(475, 956) -- quit
 end
 --}}}
@@ -140,51 +150,57 @@ function prepareTasks(tasks)--{{{
   end
 end
 --}}}
+function generalHSlide()--{{{
+  hslide1(600, 100, 500, 100)
+  mSleep(500)
+end
+--}}}
+function generalVSlide()--{{{
+  vslide1(200, 150, 500, 100)
+  mSleep(500)
+end
+--}}}
 function nuomi()--{{{
   runApp("com.renren-inc.nuomi")
-  mSleep(5000)
-  while true do
-    x, y = findMultiColorInRegionFuzzy(0xffdae0, "250|24|0xe5c0a1,332|63|0xffdae0,380|41|0xe5e5e5", 100, 50, 314, 582, 691)
-    if x > 0 then
-      break
-    end
-    killAppleMsgs()
-    mSleep(2000)
-  end
+  mSleep(2000)
 
-  while true do
-    hslide1(600, 100, 500, 50)
-    mSleep(2000)
-  end
-end--}}}
+  doFindMultiColorInRegionFuzzy(true, 0xffdae0, "250|24|0xe5c0a1,332|63|0xffdae0,380|41|0xe5e5e5", 100, 50, 314, 582, 691)
+
+  doFindMultiColorInRegionFuzzy(true, 0x111111, "43|-6|0x111111,86|-6|0x111111,125|0|0x111111", 100, 245, 66, 390, 102, nil, generalHSlide)
+  click1(111, 316) -- guangzhou
+
+  doFindMultiColorInRegionFuzzy(true, 0xff9c00, "18|12|0xffffff,53|52|0xffb94a", 100, 35, 346, 126, 428)
+  click1(46, 357) -- food
+
+  doFindMultiColorInRegionFuzzy(true, 0xff93af, "9|10|0xffd7e1", 100, 283, 444, 296, 461)
+  click1(284, 446) -- first food
+end
+--}}}
 function gaode()--{{{
-end--}}}
+end
+--}}}
 function zhuche()--{{{
-end--}}}
+end
+--}}}
 function taofen8()--{{{
   runApp("com.taofen8.TfClient")
-  mSleep(3000)
+  mSleep(2000)
 
-  while true do
-    hslide1(600, 100, 500, 50)
-    mSleep(2000)
-    x,y = findMultiColorInRegionFuzzy(0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056)
-    if x > 0 then
-      click1(x, y) -- try now
-      break
-    end
-  end
+  doFindMultiColorInRegionFuzzy(true, 0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056, nil, generalHSlide)
+  click1(236, 1005) -- try now
 
-  mSleep(1500)
+  -- check refresh page
+  doFindMultiColorInRegionFuzzy(false, 0xb7b6b6, "23|18|0xcfcece", 100, 125, 617, 156, 647, nil, generalVSlide)
+
   if doFindColorInRegionFuzzy(0xD3B00D, 70, 594, 168, 601, 175, 3) then
-    click1(x, y) -- close button
+    click1(597, 171) -- close button
   end
 
   mSleep(1000)
   click1(62, 465) -- login
   mSleep(1000)
 
-  if not doFindColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209, 25) then
+  if not doFindColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209, 100) then
     dialog("fail to load taobao login page", 5)
     return
   end
@@ -194,32 +210,29 @@ function taofen8()--{{{
   username, password = readOneAccount()
 
   click1(113, 279)
+  mSleep(1000)
   inputText(username)
-  mSleep(1000)
   click1(319, 369)
-  inputText(password)
   mSleep(1000)
+  inputText(password)
   click1(319, 490)
-  mSleep(5000)
 
-  x, y = findMultiColorInRegionFuzzy(0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788)
-  if x > 0 then
-    click1(x, y) -- fen zhuang
-  end
+  doFindMultiColorInRegionFuzzy(true, 0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788)
+  click1(245, 726) -- fen zhuang
 
-  x, y = findMultiColorInRegionFuzzy(0xf73d7f, "93|36|0xffffff,139|44|0xffffff,202|37|0xffffff", 100, 141, 788, 498, 863)
-  if x > 0 then
-    click1(x, y) -- ok, I know
-  end
+  doFindMultiColorInRegionFuzzy(true, 0xf73d7f, "93|36|0xffffff,139|44|0xffffff,202|37|0xffffff", 100, 141, 788, 498, 863)
+  click1(244, 820) -- ok, I know
+
+  mSleep(1000)
 
   tasks = {
     {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
     {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
     {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
   }
-  for i=1,2 do
+  for i=1,3 do
     prepareTasks(tasks)
-    vslide1(200, 950, 150, 10)
+    vslide1(200, 500, 150, 50)
     mSleep(2000)
   end
   for k,v in ipairs(tasks) do
@@ -231,10 +244,10 @@ end
 --}}}
 function main()--{{{
   init("0", 0)
-  resetVPN()
-  oneKeyNewMachine()
+  --oneKeyNewPhone()
+  --resetVPN()
+  oneKeyNewPhone()
   taofen8()
-  nuomi()
 end
 --}}}
 
