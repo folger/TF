@@ -111,7 +111,7 @@ function oneKeyNewPhone()--{{{
   --click1(38, 83) -- back
   click1(475, 820) -- one key new machine
   doFindColorInRegionFuzzy(0x942be9, 100, 326, 545, 332, 560)
-  click1(475, 956) -- quit
+  --click1(475, 956) -- quit
 end
 --}}}
 function prepareTasks(tasks)--{{{
@@ -161,7 +161,7 @@ function nuomi()--{{{
   doFindMultiColorInRegionFuzzy(true, 0xff9c00, "18|12|0xffffff,53|52|0xffb94a", 100, 35, 346, 126, 428)
   click1(46, 357) -- food
 
-  doFindMultiColorInRegionFuzzy(true, 0xff93af, "9|10|0xffd7e1", 100, 283, 444, 296, 461)
+  doFindMultiColorInRegionFuzzy(true, 0xff93af, "9|10|0xffd7e1", 100, 274, 255, 634, 689)
   click1(284, 446) -- first food
 
   mSleep(1000)
@@ -190,11 +190,12 @@ function taofen8(tasks, username, password)--{{{
   click1(62, 465) -- login
   mSleep(1000)
 
-  if not doFindColorInRegionFuzzy(0xFF5000, 90, 47, 166, 211, 209, 100) then
+  if not doFindMultiColorInRegionFuzzy(true, 0x6f2005, "25|11|0xdc4001,47|4|0xffd0bc", 100, 249, 461, 391, 511, 60) then
     dialog("fail to load taobao login page", 5)
     return
   end
 
+  mSleep(1000)
   click1(113, 279)
   mSleep(1000)
   inputText(username)
@@ -230,22 +231,25 @@ end
 function main()--{{{
   init("0", 0)
 
-  ret, check_1 = showUI("{\
-    \"style\": \"default\",\
-    \"config\": \"save_taofen8.dat\",\
-    \"views\": [\
-      {\
-        \"type\": \"Label\",\
-        \"text\": \"任务\",\
-        \"size\": 25,\
-        \"align\": \"center\",\
-        \"color\": \"0,0,255\",\
-      },\
-      {\
-        \"type\": \"CheckBoxGroup\",\
-        \"list\": \"百度糯米,高德地图,神舟租车\"\
-      }\
-    ]}")
+  ret, check_1 = showUI([[
+    {
+      "style": "default",
+      "config": "save_taofen8.dat",
+      "views": [
+        {
+          "type": "Label",
+          "text": "任务",
+          "size": 25,
+          "align": "center",
+          "color": "0,0,255",
+        },
+        {
+          "type": "CheckBoxGroup",
+          "list": "百度糯米,高德地图,神舟租车"
+        }
+      ]
+    }
+  ]])
 
   if ret == 1 and #check_1 ~= 0 then
     alltasks = {
