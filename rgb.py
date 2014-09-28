@@ -1,3 +1,5 @@
+#! /usr/bin/python
+
 while True:
     color = input('RGB: ')
     if len(color) == 0:
