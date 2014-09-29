@@ -28,7 +28,7 @@ function slide(p, x, y1, y2, vertical, step)--{{{
       step = -step
     end
     count = (y2 - y1) / step
-    for i=1,count do
+    for i = 1, count do
       touch(touchMove, x, y1 + i * step)
       mSleep(30)
     end
@@ -48,8 +48,8 @@ function hslide1(x1, x2, y, step)--{{{
 end
 --}}}
 function allPointsInRegionColorMatch(color, x1, y1, x2, y2)--{{{
-  for x = x1,x2 - 1 do
-    for y = y1,y2 - 1 do
+  for x = x1, x2 - 1 do
+    for y = y1, y2 - 1 do
       if color ~= getColor(x, y) then
         return false
       end
@@ -64,7 +64,7 @@ end
 --}}}
 function doFindMultiColorInRegionFuzzy(iffound, color, posandcolor, degree, x1, y1, x2, y2, times, notFoundFunc)--{{{
   times = times or 10000
-  for i=1, times do
+  for i = 1, times do
     mSleep(500)
     if posandcolor then
       x, y = findMultiColorInRegionFuzzy(color, posandcolor, degree, x1, y1, x2, y2)
@@ -129,7 +129,7 @@ function prepareTasks(tasks)--{{{
           end
         end
         runApp("com.taofen8.TfClient")
-        mSleep(3000)
+        mSleep(1000)
       end
     end
   end
@@ -137,7 +137,7 @@ end
 --}}}
 function generalHSlide(sleep)--{{{
   hslide1(600, 100, 500, 100)
-  mSleep(slepp or 500)
+  mSleep(sleep or 500)
 end
 --}}}
 function generalVSlide(sleep)--{{{
@@ -226,7 +226,7 @@ end
 function main()--{{{
   init("0", 0)
 
-  ret, check_1 = showUI([[
+  local ret, check_1 = showUI([[
     {
       "style": "default",
       "config": "save_taofen8.dat",
@@ -247,15 +247,15 @@ function main()--{{{
   ]])
 
   if ret == 1 and #check_1 ~= 0 then
-    alltasks = {
+    local alltasks = {
       {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
       {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
       {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
     }
-    tasks = {}
-    pos = 0
+    local tasks = {}
+    local pos = 0
     while true do
-      at = string.find(check_1, "@", pos)
+      local at = string.find(check_1, "@", pos)
       if not at then
         table.insert(tasks, alltasks[tonumber(string.sub(check_1, pos)) + 1])
         break
@@ -264,17 +264,17 @@ function main()--{{{
       pos = at + 1
     end
 
-    TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
-    first = true
+    local TBAccounts = io.open('/User/Media/TouchSprite/lua/TBAccounts.txt')
+    local first = true
     while true do
-      line = TBAccounts:read()
+      local line = TBAccounts:read()
       if not line then
         dialog("all suers finished", 5)
         break
       end
-      comma = string.find(line, ",")
-      username = string.sub(line, 0, comma-1)
-      password = string.sub(line, comma+1)
+      local comma = string.find(line, ",")
+      local username = string.sub(line, 0, comma-1)
+      local password = string.sub(line, comma+1)
 
       if not first then
         secs = 5
