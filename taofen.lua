@@ -13,16 +13,15 @@ function click1(x, y)--{{{
   click(1, x, y)
 end
 --}}}
-function touch(func, p, x, y, vertical)--{{{
-  if vertical then
-    func(p, x, y)
-  else
-    func(p, y, x)
-  end
-end
---}}}
 function slide(p, x, y1, y2, vertical, step)--{{{
-  touch(touchDown, p, x, y1, vertical)
+  local touch = function(func, x, y)
+    if vertical then
+      func(p, x, y)
+    else
+      func(p, y, x)
+    end
+  end
+  touch(touchDown, x, y1)
   mSleep(500)
   if step > 0 then
     if y1 > y2 then
@@ -30,14 +29,14 @@ function slide(p, x, y1, y2, vertical, step)--{{{
     end
     count = (y2 - y1) / step
     for i=1,count do
-      touch(touchMove, p, x, y1 + i * step, vertical)
+      touch(touchMove, x, y1 + i * step)
       mSleep(30)
     end
   else
-    touch(touchMove, p, x, y2, vertical)
+    touch(touchMove, x, y2)
     mSleep(500)
   end
-  touch(touchUp, p, x, y2, vertical)
+  touch(touchUp, x, y2)
 end
 --}}}
 function vslide1(x, y1, y2, step)--{{{
@@ -64,9 +63,7 @@ function doFindColorInRegionFuzzy(color, degree, x1, y1, x2, y2, times)--{{{
 end
 --}}}
 function doFindMultiColorInRegionFuzzy(iffound, color, posandcolor, degree, x1, y1, x2, y2, times, notFoundFunc)--{{{
-  if not times then
-    times = 10000
-  end
+  times = times or 10000
   for i=1, times do
     mSleep(500)
     if posandcolor then
@@ -74,9 +71,7 @@ function doFindMultiColorInRegionFuzzy(iffound, color, posandcolor, degree, x1, 
     else
       x, y = findColorInRegionFuzzy(color, degree, x1, y1, x2, y2)
     end
-    if not iffound then
-      x = -x
-    end
+    x = iffound and x or -x
     if x > 0 then
       return true
     end
@@ -140,14 +135,14 @@ function prepareTasks(tasks)--{{{
   end
 end
 --}}}
-function generalHSlide()--{{{
+function generalHSlide(sleep)--{{{
   hslide1(600, 100, 500, 100)
-  mSleep(500)
+  mSleep(slepp or 500)
 end
 --}}}
-function generalVSlide()--{{{
+function generalVSlide(sleep)--{{{
   vslide1(200, 150, 500, 100)
-  mSleep(500)
+  mSleep(sleep or 500)
 end
 --}}}
 function nuomi()--{{{
@@ -245,7 +240,7 @@ function main()--{{{
         },
         {
           "type": "CheckBoxGroup",
-          "list": "百度糯米,高德地图,神舟租车"
+          "list": "百度糯米,大众点评,携程旅游,高德地图,神州租车"
         }
       ]
     }
