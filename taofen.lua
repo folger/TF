@@ -154,7 +154,7 @@ end
 --}}}
 function generateUsernameAndPassword(len)--{{{
   len = len or 6
-  local charMap = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789"
+  local charMap = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
   local name = ""
   math.randomseed(os.time())
   for i = 1, len do
@@ -164,6 +164,14 @@ function generateUsernameAndPassword(len)--{{{
   return name, name .. name
 end
 --}}}
+function clearText(len)--{{{
+  len = len or 30
+ local text = ""
+ for i = 1, len do
+   text = text .. "\b"
+ end
+ inputText(text)
+end--}}}
 function nuomi()--{{{
   runApp("com.renren-inc.nuomi")
 
@@ -224,12 +232,15 @@ function haodou()--{{{
     username, password = generateUsernameAndPassword()
     click1(98, 279) -- email
     mSleep(1000)
+    clearText()
     inputText(username .. "@163.com")
     click1(98, 395) -- nickname
     mSleep(1000)
+    clearText()
     inputText(username)
     click1(98, 511) -- nickname
     mSleep(1000)
+    clearText()
     inputText(password)
     click1(317, 644) -- done
 
@@ -375,7 +386,7 @@ function main()--{{{
       local password = string.sub(line, comma+1)
 
       if not first then
-        secs = 200
+        secs = 180
         dialogRet(string.format("Next user is %s, please wait %d secs", username, secs), "Start Now", 0, 0, secs)
       else
         first = false
