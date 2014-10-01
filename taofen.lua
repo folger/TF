@@ -111,20 +111,27 @@ end
 --}}}
 function prepareTasks(tasks)--{{{
   for k, v in ipairs(tasks) do
-    if not v.found then
+    if v.found == 0 then
       x, y = findMultiColorInRegionFuzzy(v.color, v.posandcolor, 100, 5, 135, 111, 1135)
       if x > 0 then
-        v.found = true
         click1(x, y)
         click1(317, 747) -- start task
-        doFindMultiColorInRegionFuzzy(true, 0x8a8a8a, "47|23|0xa6a6a6,66|3|0xe8e8e8", 100, 73, 401, 152, 427)
-        if allPointsInRegionColorMatch(general_blue, 583, 324, 585, 351) then -- download cloud
-          click1(583, 324)
-          while true do -- downloading
-            mSleep(1000)
-            resetIDLETimer()
-            if allPointsInRegionColorMatch(general_blue, 581, 324, 582, 343) then -- open button
-              break
+        mSleep(500)
+        if findColorInRegionFuzzy(general_blue, 100, 289, 630, 358, 663) > 0 then
+          v.found = -1
+          click1(322, 649) -- same task too many times
+          click1(557, 324)
+        else
+          v.found = 1
+          doFindMultiColorInRegionFuzzy(true, 0x8a8a8a, "47|23|0xa6a6a6,66|3|0xe8e8e8", 100, 73, 401, 152, 427)
+          if allPointsInRegionColorMatch(general_blue, 583, 324, 585, 351) then -- download cloud
+            click1(583, 324)
+            while true do -- downloading
+              mSleep(1000)
+              resetIDLETimer()
+              if allPointsInRegionColorMatch(general_blue, 581, 324, 582, 343) then -- open button
+                break
+              end
             end
           end
         end
@@ -145,6 +152,18 @@ function generalVSlide(sleep)--{{{
   mSleep(sleep or 500)
 end
 --}}}
+function generateUsernameAndPassword(len)--{{{
+  len = len or 6
+  local charMap = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_0123456789"
+  local name = ""
+  math.randomseed(os.time())
+  for i = 1, len do
+    n = math.random(#charMap)
+    name = name .. string.sub(charMap, n, n)
+  end
+  return name, name .. name
+end
+--}}}
 function nuomi()--{{{
   runApp("com.renren-inc.nuomi")
 
@@ -160,7 +179,7 @@ function nuomi()--{{{
   mSleep(1000)
 end
 --}}}
-function dazhong()--{{{
+function dianping()--{{{
   runApp("com.dianping.dpscope")
 
   doFindMultiColorInRegionFuzzy(true, 0xff8400, "29|16|0xffebdf,117|30|0xffa867", 100, 244, 914, 402, 960, nil, generalHSlide)
@@ -175,7 +194,7 @@ function dazhong()--{{{
   doFindMultiColorInRegionFuzzy(true, 0x948b7e, "15|12|0xd3d0ca", 100, 592, 243, 617, 371)
   click1(596, 343) -- first food
 
-  mSlepp(1000)
+  mSleep(1000)
 end
 --}}}
 function xiecheng()--{{{
@@ -189,6 +208,44 @@ end
 --}}}
 function haodou()--{{{
   runApp("com.haodou.cookbook")
+  mSleep(3000)
+
+  click1(318, 1021) -- experience now
+  click1(100, 100) -- skip hint
+
+  click1(46, 71) -- menu
+  click1(100, 100) -- skip hint
+  click1(100, 100) -- register
+
+  click1(304, 800) -- register
+  click1(478, 162) -- email register
+
+  while true do
+    username, password = generateUsernameAndPassword()
+    click1(98, 279) -- email
+    mSleep(1000)
+    inputText(username .. "@163.com")
+    click1(98, 395) -- nickname
+    mSleep(1000)
+    inputText(username)
+    click1(98, 511) -- nickname
+    mSleep(1000)
+    inputText(password)
+    click1(317, 644) -- done
+
+    if doFindMultiColorInRegionFuzzy(true, 0xb2b2b2, "41|8|0x979797,52|93|0xe4e4e4", 100, 34, 166, 209, 326, 5) then
+      break
+    end
+  end
+
+  click1(46, 71) -- menu
+  click1(149, 289) -- main page
+  click1(317, 160) -- discover
+  click1(100, 100) -- skip hint
+  click1(531, 160) -- square
+  click1(88, 294) -- happy in kitchen
+  click1(43, 170) -- first food in kitchen
+
   mSleep(1000)
 end
 --}}}
@@ -211,7 +268,6 @@ function taofen8(tasks, username, password)--{{{
 
   mSleep(1000)
   click1(62, 465) -- login
-  mSleep(1000)
 
   if not doFindMultiColorInRegionFuzzy(true, 0x6f2005, "25|11|0xdc4001,47|4|0xffd0bc", 100, 249, 461, 391, 511, 60) then
     dialog("fail to load taobao login page", 5)
@@ -227,11 +283,21 @@ function taofen8(tasks, username, password)--{{{
   inputText(password)
   click1(319, 490)
 
-  if doFindMultiColorInRegionFuzzy(true, 0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788, 20) then
-    click1(245, 726) -- fen zhuang
-  else
-    dialog("Cannot find fen zhuang, try next user", 3)
-    return
+  tryFenZhuang = 0
+  while true do
+    if doFindMultiColorInRegionFuzzy(true, 0x788fd1, "26|40|0xffffff,79|47|0xffffff,101|5|0xec1313", 100, 189, 659, 319, 788, 10) then
+      click1(245, 726) -- fen zhuang
+      break
+    end
+    if tryFenZhuang > 0 then
+      dialog("Cannot find fen zhuang, try next user", 3)
+      return
+    end
+    tryFenZhuang = tryFenZhuang + 1
+    click1(571, 174) -- click close button and try again
+    generalVSlide()
+    mSleep(1000)
+    click1(62, 465) -- login
   end
 
   doFindMultiColorInRegionFuzzy(true, 0xf73d7f, "93|36|0xffffff,139|44|0xffffff,202|37|0xffffff", 100, 141, 788, 498, 863)
@@ -245,7 +311,7 @@ function taofen8(tasks, username, password)--{{{
     mSleep(2000)
   end
   for k,v in ipairs(tasks) do
-    if v.found then
+    if v.found == 1 then
       v.func()
     end
   end
@@ -276,13 +342,13 @@ function main()--{{{
 
   if ret == 1 and #check_1 ~= 0 then
     local alltasks = {
-      {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
-      {func=dazhong, color=0xffa04c, posandcolor="19|14|0xea7515,43|25|0xe8a785,64|52|e69b6b", found=false},
-      {func=xiecheng, color=0x000000, posandcolor="", found=false},
-      {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
-      {func=yilong, color=0x00000, posandcolor="", found=false},
-      {func=haodou, color=0x7ec41e, posandcolor="14|12|0xfee400,53|21|0xfc7900,64|63|0x66a40d", found=false},
-      {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
+      {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=0},
+      {func=dianping, color=0xffa04c, posandcolor="19|14|0xea7515,43|25|0xe8a785,64|52|e69b6b", found=0},
+      {func=xiecheng, color=0x000000, posandcolor="", found=0},
+      {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=0},
+      {func=yilong, color=0x00000, posandcolor="", found=0},
+      {func=haodou, color=0x7ec41e, posandcolor="14|12|0xfee400,53|21|0xfc7900,64|63|0x66a40d", found=0},
+      {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=0},
     }
     local tasks = {}
     local pos = 0
@@ -309,13 +375,13 @@ function main()--{{{
       local password = string.sub(line, comma+1)
 
       if not first then
-        secs = 5
+        secs = 200
         dialogRet(string.format("Next user is %s, please wait %d secs", username, secs), "Start Now", 0, 0, secs)
       else
         first = false
       end
       for k, v in ipairs(tasks) do
-        v.found = false
+        v.found = 0
       end
 
       --oneKeyNewPhone()
