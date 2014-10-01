@@ -148,10 +148,8 @@ end
 function nuomi()--{{{
   runApp("com.renren-inc.nuomi")
 
-  doFindMultiColorInRegionFuzzy(true, 0xffdae0, "250|24|0xe5c0a1,332|63|0xffdae0,380|41|0xe5e5e5", 100, 50, 314, 582, 691)
-
   doFindMultiColorInRegionFuzzy(true, 0x111111, "43|-6|0x111111,86|-6|0x111111,125|0|0x111111", 100, 245, 66, 390, 102, nil, generalHSlide)
-  click1(111, 316) -- guangzhou
+  click1(111, 316) -- GPS position
 
   doFindMultiColorInRegionFuzzy(true, 0xff9c00, "18|12|0xffffff,53|52|0xffb94a", 100, 35, 346, 126, 428)
   click1(46, 357) -- food
@@ -162,7 +160,36 @@ function nuomi()--{{{
   mSleep(1000)
 end
 --}}}
+function dazhong()--{{{
+  runApp("com.dianping.dpscope")
+
+  doFindMultiColorInRegionFuzzy(true, 0xff8400, "29|16|0xffebdf,117|30|0xffa867", 100, 244, 914, 402, 960, nil, generalHSlide)
+  click1(254, 926) -- experience now
+
+  mSleep(500)
+  click1(66, 252) -- GPS position
+
+  doFindMultiColorInRegionFuzzy(true, 0xffa955, "14|19|0xfeeee0,49|56|0xffeedf", 100, 36, 151, 152, 254)
+  click1(64, 165) -- food
+
+  doFindMultiColorInRegionFuzzy(true, 0x948b7e, "15|12|0xd3d0ca", 100, 592, 243, 617, 371)
+  click1(596, 343) -- first food
+
+  mSlepp(1000)
+end
+--}}}
+function xiecheng()--{{{
+end
+--}}}
 function gaode()--{{{
+end
+--}}}
+function yilong()--{{{
+end
+--}}}
+function haodou()--{{{
+  runApp("com.haodou.cookbook")
+  mSleep(1000)
 end
 --}}}
 function zhuche()--{{{
@@ -174,6 +201,7 @@ function taofen8(tasks, username, password)--{{{
   doFindMultiColorInRegionFuzzy(true, 0xffffff, "56|-3|0xffffff,98|-5|0xffffff,179|-9|0x88b9ec", 100, 165, 978, 468, 1056, nil, generalHSlide)
   click1(236, 1005) -- try now
 
+  mSleep(1000)
   -- check refresh page
   doFindMultiColorInRegionFuzzy(false, 0xb7b6b6, "23|18|0xcfcece", 100, 125, 617, 156, 647, nil, generalVSlide)
 
@@ -240,7 +268,7 @@ function main()--{{{
         },
         {
           "type": "CheckBoxGroup",
-          "list": "百度糯米,大众点评,携程旅游,高德地图,神州租车"
+          "list": "百度糯米,大众点评,携程旅游,高德地图,艺龙,好豆菜谱,神州租车"
         }
       ]
     }
@@ -249,7 +277,11 @@ function main()--{{{
   if ret == 1 and #check_1 ~= 0 then
     local alltasks = {
       {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=false},
+      {func=dazhong, color=0xffa04c, posandcolor="19|14|0xea7515,43|25|0xe8a785,64|52|e69b6b", found=false},
+      {func=xiecheng, color=0x000000, posandcolor="", found=false},
       {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=false},
+      {func=yilong, color=0x00000, posandcolor="", found=false},
+      {func=haodou, color=0x7ec41e, posandcolor="14|12|0xfee400,53|21|0xfc7900,64|63|0x66a40d", found=false},
       {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=false},
     }
     local tasks = {}
