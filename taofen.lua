@@ -217,21 +217,23 @@ function gaode()--{{{
   doFindMultiColorInRegionFuzzy(true, 0x33afd2, "60|19|0xffffff,108|26|0xadd9e9", 100, 261, 1025, 376, 1055, nil, generalHSlide)
   click1(265, 1027) -- start map
 
+  local goback = function() click1(27, 85) end
+
   click1(344, 1027) -- agree
   click1(63, 1114) -- routine
-  click1(27, 85) -- back
+  goback()
   click1(227, 1116) -- go out
   skipHint()
   click1(401, 66) -- by bus
   click1(84, 527) -- bus
-  click1(27, 85) -- back
+  goback()
   click1(414, 537) -- train
-  click1(27, 85) -- back
+  goback()
   click1(45, 697) -- hotel
-  click1(27, 85) -- back
+  goback()
   click1(253, 675) -- plane
-  click1(27, 85) -- back
-  click1(27, 85) -- back
+  goback()
+  goback()
   for i = 1, 3 do
     generalVSlide()
   end
@@ -289,6 +291,38 @@ function haodou()--{{{
 end
 --}}}
 function zhuche()--{{{
+end
+--}}}
+function guomei()--{{{
+  runApp("com.gome.gomeEShop")
+
+  doFindMultiColorInRegionFuzzy(true, 0xc6de5d, "33|27|0xaed11c,140|66|0xffffff", 100, 118, 791, 520, 916, nil, generalHSlide)
+  click1(159, 828) -- go
+  mSleep(2000)
+  skipHint()
+  mSleep(2000)
+  click1(197, 1109) -- category
+  mSleep(1000)
+  click1(332,1111) -- search
+  mSleep(1000)
+  click1(447,1102) -- shopping car
+  mSleep(1000)
+  click1(594,1111) -- my
+  mSleep(1000)
+  click1(80,1111) -- first page
+  mSleep(1000)
+
+  local goback = function() click1(43, 61) end
+
+  click1(41, 455) -- yao yao mei
+  goback()
+  click1(185, 455) -- charge phone
+  goback()
+  click1(312, 455) -- lottery
+  goback()
+  click1(619, 455) -- more service
+
+  mSleep(1000)
 end
 --}}}
 function taofen8(tasks, username, password)--{{{
@@ -373,7 +407,7 @@ function main()--{{{
         },
         {
           "type": "CheckBoxGroup",
-          "list": "百度糯米,大众点评,携程旅游,高德地图,艺龙,好豆菜谱,神州租车"
+          "list": "百度糯米,大众点评,携程旅游,高德地图,艺龙,好豆菜谱,神州租车,国美"
         }
       ]
     }
@@ -388,6 +422,7 @@ function main()--{{{
       {func=yilong, color=0x00000, posandcolor="", found=0},
       {func=haodou, color=0x7ec41e, posandcolor="14|12|0xfee400,53|21|0xfc7900,64|63|0x66a40d", found=0},
       {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=0},
+      {func=guomei, color=0xe84848, posandcolor="25|15|0xef9f9f,57|45|0xffffff,75|63|0xc51515", found=0},
     }
     local tasks = {}
     local pos = 0
