@@ -172,6 +172,9 @@ function clearText(len)--{{{
  end
  inputText(text)
 end--}}}
+function skipHint()--{{{
+  click1(100, 100) -- skip hint
+end--}}}
 function nuomi()--{{{
   runApp("com.renren-inc.nuomi")
 
@@ -209,6 +212,31 @@ function xiecheng()--{{{
 end
 --}}}
 function gaode()--{{{
+  runApp("com.autonavi.amap")
+
+  doFindMultiColorInRegionFuzzy(true, 0x33afd2, "60|19|0xffffff,108|26|0xadd9e9", 100, 261, 1025, 376, 1055, nil, generalHSlide)
+  click1(265, 1027) -- start map
+
+  click1(344, 1027) -- agree
+  click1(63, 1114) -- routine
+  click1(27, 85) -- back
+  click1(227, 1116) -- go out
+  skipHint()
+  click1(401, 66) -- by bus
+  click1(84, 527) -- bus
+  click1(27, 85) -- back
+  click1(414, 537) -- train
+  click1(27, 85) -- back
+  click1(45, 697) -- hotel
+  click1(27, 85) -- back
+  click1(253, 675) -- plane
+  click1(27, 85) -- back
+  click1(27, 85) -- back
+  for i = 1, 3 do
+    generalVSlide()
+  end
+
+  mSleep(1000)
 end
 --}}}
 function yilong()--{{{
@@ -219,10 +247,10 @@ function haodou()--{{{
   mSleep(3000)
 
   click1(318, 1021) -- experience now
-  click1(100, 100) -- skip hint
+  skipHint()
 
   click1(46, 71) -- menu
-  click1(100, 100) -- skip hint
+  skipHint()
   click1(100, 100) -- register
 
   click1(304, 800) -- register
@@ -252,7 +280,7 @@ function haodou()--{{{
   click1(46, 71) -- menu
   click1(149, 289) -- main page
   click1(317, 160) -- discover
-  click1(100, 100) -- skip hint
+  skipHint()
   click1(531, 160) -- square
   click1(88, 294) -- happy in kitchen
   click1(43, 170) -- first food in kitchen
