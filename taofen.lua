@@ -209,6 +209,26 @@ function dianping()--{{{
 end
 --}}}
 function xiecheng()--{{{
+  runApp("ctrip.com")
+
+  doFindMultiColorInRegionFuzzy(true, 0xff929f, "26|4|0xffffff,48|33|0xff6073", 100, 52, 300, 173, 401, nil, generalHSlide)
+
+  local goback = function() click1(37, 84) end
+
+  click1(88, 317) -- hotel
+  goback()
+  click1(319, 317) -- plane tickets
+  goback()
+  click1(519, 317) -- train tickets
+  goback()
+  click1(88, 517) -- tuan gou
+  goback()
+  click1(319, 517) -- self drive
+  goback()
+  click1(519, 517) -- car tickets
+  goback()
+
+  mSleep(1000)
 end
 --}}}
 function gaode()--{{{
@@ -242,6 +262,25 @@ function gaode()--{{{
 end
 --}}}
 function yilong()--{{{
+  runApp("com.elong.app")
+  
+  doFindMultiColorInRegionFuzzy(true, 0xf04949, "47|36|0xffffff,150|123|0xf05a5a", 100, 7, 295, 319, 572, nil, generalHSlide)
+
+  local goback = function() click1(1, 93) end
+
+  click1(146, 425) -- hotel
+  goback()
+  click1(443, 438) -- plane tickets
+  click1(415, 192) -- back & forth
+  goback()
+  click1(146, 710) -- today special
+  goback()
+  click1(443, 710) -- train tickets
+  goback()
+  click1(443, 914) -- train tickets
+  goback()
+
+  mSleep(1000)
 end
 --}}}
 function haodou()--{{{
@@ -291,6 +330,35 @@ function haodou()--{{{
 end
 --}}}
 function zhuche()--{{{
+  runApp("com.szzc.szzc")
+
+  doFindMultiColorInRegionFuzzy(true, 0xfcd36a, "19|12|0xffffff,48|47|0xfabb1d", 100, 49, 377, 111, 437)
+
+  local goback = function() click1(6,71) end
+
+  click1(67, 411) -- nearby
+  goback()
+  click1(226, 411) -- my
+  goback()
+  click1(398, 411) -- invite
+  goback()
+  click1(64, 655) -- self drive
+  goback()
+  click1(538, 674) -- shun feng
+  goback()
+  click1(287, 1001) -- shop
+  goback()
+  click1(287, 674) -- long rent
+  click1(522, 216) -- city
+  click1(488, 212) -- one city
+  click1(515, 552) -- brand
+  click1(584, 1099) -- ok
+  click1(535, 659) -- model
+  click1(345, 1093) -- next
+  goback()
+  goback()
+
+  mSleep(1000)
 end
 --}}}
 function guomei()--{{{
@@ -417,9 +485,9 @@ function main()--{{{
     local alltasks = {
       {func=nuomi, color=0xf84775, posandcolor="26|24|0xf5fcfc,54|28|0xfc9cbc,37|56|0xf7648d", found=0},
       {func=dianping, color=0xffa04c, posandcolor="19|14|0xea7515,43|25|0xe8a785,64|52|e69b6b", found=0},
-      {func=xiecheng, color=0x000000, posandcolor="", found=0},
+      {func=xiecheng, color=0x1c80fa, posandcolor="17|17|0xdeebfd,54|40|oxfe9913,78|71|bbd5f8", found=0},
       {func=gaode, color=0xc4e3a5, posandcolor="17|0|0xfedb82,36|30|0x0093fd,60|64|0xb0d3f5", found=0},
-      {func=yilong, color=0x00000, posandcolor="", found=0},
+      {func=yilong, color=0xf59ca3, posandcolor="21|13|0xe81828,50|22|0xfef5f6,49|41|0xd94550", found=0},
       {func=haodou, color=0x7ec41e, posandcolor="14|12|0xfee400,53|21|0xfc7900,64|63|0x66a40d", found=0},
       {func=zhuche, color=0xfabd00, posandcolor="27|22|0x1a2938,5|44|0x0d203b,75|43|0x162639", found=0},
       {func=guomei, color=0xe84848, posandcolor="25|15|0xef9f9f,57|45|0xffffff,75|63|0xc51515", found=0},
