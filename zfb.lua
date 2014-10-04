@@ -123,8 +123,12 @@ function main()--{{{
     mSleep(1000)
     inputText(login_password)
     click1(317, 459)
-    mSleep(1000)
-    if doFindMultiColorInRegionFuzzy(true, 0x7d9fb5, "58|18|0xb0d6e8,141|26|0x09294f", 100, 225, 340, 411, 370, 30) then
+    mSleep(2000)
+    local times = 30
+    if findMultiColorInRegionFuzzy(0x707070, "7|6|0x7a7a7a,24|14|0x7c7c7c", 100, 385, 390, 429, 433) > 0 then
+      times = nil
+    end
+    if doFindMultiColorInRegionFuzzy(true, 0x7d9fb5, "58|18|0xb0d6e8,141|26|0x09294f", 100, 225, 340, 411, 370, times) then
       accountsGood:write(line .. "\n")
 
       click1(624 ,69)
@@ -181,6 +185,7 @@ function main()--{{{
         mSleep(1000)
         inputText(pay_password)
         click1(472 ,552) -- pay
+        mSleep(1000)
         if not doFindColorInRegionFuzzy(0x0baf1a, 100, 29, 159, 90, 218, 30) then
           break
         end
