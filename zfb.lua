@@ -81,9 +81,9 @@ function checkMoney()--{{{
     {n="9", width=14,color=0xffffff, posandcolor="0|1|0xffffff,0|2|0xffffff,0|3|0xfefefe,0|4|0xe6e6e6,0|5|0xcacaca,0|6|0xb2b2b2,0|7|0xbfbfbf,0|8|0xd6d6d6,0|9|0xf4f4f4,0|10|0xffffff,0|11|0xffffff,0|12|0xffffff,0|13|0xffffff,0|14|0xffffff,0|15|0xfafafa,0|16|0xffffff,0|17|0xffffff,0|18|0xffffff,0|19|0xffffff,0|20|0xffffff"},
     {n="9", width=14,color=0xffffff, posandcolor="0|1|0xffffff,0|2|0xffffff,0|3|0xd8d8d8,0|4|0x999999,0|5|0x7d7d7d,0|6|0x676767,0|7|0x727272,0|8|0x8a8a8a,0|9|0xb1b1b1,0|10|0xf7f7f7,0|11|0xffffff,0|12|0xffffff,0|13|0xffffff,0|14|0xffffff,0|15|0xbfbfbf,0|16|0xd2d2d2,0|17|0xf7f7f7,0|18|0xffffff,0|19|0xffffff,0|20|0xffffff"},
   }
-  local x = 470
+  local x = 490
   while x < 571 do
-    for k, v in ipairs(number) do
+    for _, v in ipairs(number) do
       local x1, y1 =  findMultiColorInRegionFuzzy(v.color, v.posandcolor, 100, x, 391, x + 1, 412)
       if x1 > 0 then
         ret = ret .. v.n
@@ -98,13 +98,21 @@ end
 --}}}
 function main()--{{{
   local config = io.open('/User/Media/TouchSprite/lua/zfb_config.txt')
+  local account_file = config:read()
   local login_password = config:read()
   local pay_password = config:read()
   local payto_account = config:read()
   local onePay = tonumber(config:read())
   config:close()
 
-  local accounts = io.open('/User/Media/TouchSprite/lua/zfb.txt')
+  local last_account = io.open('/User/Media/TouchSprite/lua/last_account.txt')
+  local lastAccount = nil
+  if last_account then
+    lastAccount = last_account:read()
+    last_account:close()
+  end
+
+  local accounts = io.open('/User/Media/TouchSprite/lua/' .. account_file)
   local accountsGood = io.open('/User/Media/TouchSprite/lua/zfb_good.txt', 'w')
   local accountsBad = io.open('/User/Media/TouchSprite/lua/zfb_bad.txt', 'w')
   for line in accounts:lines() do
@@ -175,17 +183,18 @@ function main()--{{{
         --end
         click1(330 ,793) -- ok
         mSleep(1000)
-        --if findColorInRegionFuzzy(0x397af2, 100, 330, 664, 526, 730) > 0 then
-          --click1(452, 690) -- ok again
-        --end
-        local okAgain = function() click1(452, 690) end
+        local okAgain = function() click1(452, 690)
+          mSleep(500)
+          if findColorInRegionFuzzy(0x397af2, 100, 330, 664, 526, 730) > 0 then
+            click1(452, 690) -- ok again
+          end
+        end
         if not doFindColorInRegionFuzzy(0x0, 100, 50, 244, 140, 281, nil, okAgain) then
           break
         end
         mSleep(1000)
         inputText(pay_password)
         click1(472 ,552) -- pay
-        mSleep(1000)
         if not doFindColorInRegionFuzzy(0x0baf1a, 100, 29, 159, 90, 218, 30) then
           break
         end
