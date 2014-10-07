@@ -137,6 +137,7 @@ function main()--{{{
   local pay_password = config:read()
   local payto_account = config:read()
   local onePay = tonumber(config:read())
+  local dama2 = config:read()
   config:close()
 
   local last_account = io.open('/User/Media/TouchSprite/lua/last_account.txt')
@@ -166,10 +167,19 @@ function main()--{{{
     inputText(login_password)
     click1(317, 459)
     mSleep(2000)
-    local times = 30
+    local times = 60
     if findMultiColorInRegionFuzzy(0x707070, "7|6|0x7a7a7a,24|14|0x7c7c7c", 100, 385, 390, 429, 433) > 0 then
-      times = nil
       vibrator()
+      click1(326, 616)
+      code = cloudOcrText(dama2, 0, 4, 371, 369, 617, 453)
+      if code ~= "" then
+        click1(54, 402)
+        inputText(code)
+        click1(317, 568)
+      else
+        dialog("fail", 0)
+      end
+      --]]
     end
     if doFindMultiColorInRegionFuzzy(true, 0x7d9fb5, "58|18|0xb0d6e8,141|26|0x09294f", 100, 225, 340, 411, 370, times) then
       accountsGood:write(line .. "\n")
@@ -177,8 +187,6 @@ function main()--{{{
       click1(624 ,69)
       click1(480 ,638)
 
-      --doFindMultiColorInRegionFuzzy(true, 0xde2f0d, "38|17|0xeb998a,114|28|0xd54023", 100, 178, 306, 318, 353)
-      --click1(624 ,69)
       mSleep(5000)
       click1(20, 80)
 
@@ -212,16 +220,15 @@ function main()--{{{
         mSleep(1000)
         inputText(ms)
         click1(574 ,1033) -- keyboard ok
-        --if doFindColorInRegionFuzzy(0x397af2, 100, 34, 747, 100, 800) then
-          --mSleep(1000)
-          --doFindColorInRegionFuzzy(0x397af2, 100, 34, 747, 100, 800)
-        --end
         click1(330 ,793) -- ok
-        mSleep(1000)
+        mSleep(2000)
+        local okAgainDone = false
         local okAgain = function() click1(452, 690)
-          mSleep(500)
-          if findColorInRegionFuzzy(0x397af2, 100, 330, 664, 526, 730) > 0 then
-            click1(452, 690) -- ok again
+          if not okAgainDone then
+            if findMultiColorInRegionFuzzy(0x89abf5, "1|0|0xbb27f8,2|00xe7eefd", 100, 521, 662, 528, 667) > 0 then
+              click1(452, 690) -- ok again
+              okAgainDone = true
+            end
           end
         end
         if not doFindColorInRegionFuzzy(0x0, 100, 50, 244, 140, 281, nil, okAgain) then
