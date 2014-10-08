@@ -140,13 +140,6 @@ function main()--{{{
   local dama2 = config:read()
   config:close()
 
-  local last_account = io.open('/User/Media/TouchSprite/lua/last_account.txt')
-  local lastAccount = nil
-  if last_account then
-    lastAccount = last_account:read()
-    last_account:close()
-  end
-
   local accounts = io.open('/User/Media/TouchSprite/lua/' .. account_file)
   local accountsGood = io.open('/User/Media/TouchSprite/lua/zfb_good.txt', 'w')
   local accountsBad = io.open('/User/Media/TouchSprite/lua/zfb_bad.txt', 'w')
@@ -167,8 +160,9 @@ function main()--{{{
     inputText(login_password)
     click1(317, 459)
     mSleep(2000)
-    local times = 60
+    local times = 20
     if findMultiColorInRegionFuzzy(0x707070, "7|6|0x7a7a7a,24|14|0x7c7c7c", 100, 385, 390, 429, 433) > 0 then
+      -- captcha found
       vibrator()
       click1(326, 616)
       code = cloudOcrText(dama2, 0, 4, 371, 369, 617, 453)
@@ -179,7 +173,6 @@ function main()--{{{
       else
         dialog("fail", 0)
       end
-      --]]
     end
     if doFindMultiColorInRegionFuzzy(true, 0x7d9fb5, "58|18|0xb0d6e8,141|26|0x09294f", 100, 225, 340, 411, 370, times) then
       accountsGood:write(line .. "\n")
