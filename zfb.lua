@@ -35,6 +35,7 @@ function doFindMultiColorInRegionFuzzy(iffound, color, posandcolor, degree, x1, 
 end
 --}}}
 function readAccount(line)--{{{
+  --[[
   local pos = 0
   local account
   for i = 1, 3 do
@@ -46,13 +47,15 @@ function readAccount(line)--{{{
     end
   end
   return account
+  --]]
+  return trimRight(line)
 end
 --}}}
 function oneKeyNewPhone()--{{{
   runApp("org.ioshack.iGrimace")
-  doFindColorInRegionFuzzy(0x942be9, 100, 326, 545, 332, 560)
+  doFindColorInRegionFuzzy(0xffffff, 100, 326, 582, 332, 592)
   click1(475, 820) -- one key new machine
-  doFindColorInRegionFuzzy(0x942be9, 100, 326, 545, 332, 560)
+  doFindColorInRegionFuzzy(0xffffff, 100, 326, 582, 332, 592)
 end
 --}}}
 function checkMoney()--{{{
@@ -130,14 +133,20 @@ function checkMoney()--{{{
   return ret
 end
 --}}}
+function trimRight(s)--{{{
+  return string.match(s, "(.-)%s*$")
+end--}}}
+function readOneLine(f)--{{{
+  return trimRight(f:read())
+end--}}}
 function main()--{{{
   local config = io.open('/User/Media/TouchSprite/lua/zfb_config.txt')
-  local account_file = config:read()
-  local login_password = config:read()
-  local pay_password = config:read()
-  local payto_account = config:read()
-  local onePay = tonumber(config:read())
-  local dama2 = config:read()
+  local account_file = readOneLine(config)
+  local login_password = readOneLine(config)
+  local pay_password = readOneLine(config)
+  local payto_account = readOneLine(config)
+  local onePay = tonumber(readOneLine(config))
+  local dama2 = readOneLine(config)
   config:close()
 
   local accounts = io.open('/User/Media/TouchSprite/lua/' .. account_file)
