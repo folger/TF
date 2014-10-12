@@ -186,7 +186,7 @@ function main()--{{{
         inputText(code)
         click1(317, 568)
       else
-        dialog("fail", 0)
+        dialog("失败", 0)
       end
     end
     if doFindMultiColorInRegionFuzzy(true, 0x7d9fb5, "58|18|0xb0d6e8,141|26|0x09294f", 100, 225, 340, 411, 370, times) then
@@ -258,7 +258,7 @@ function main()--{{{
   accountsGood.close()
   accountsBad.close()
 
-  dialog("All Done", 0)
+  dialog("已完全所有", 0)
 end
 --}}}
 main()
