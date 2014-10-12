@@ -35,20 +35,19 @@ function doFindMultiColorInRegionFuzzy(iffound, color, posandcolor, degree, x1, 
 end
 --}}}
 function readAccount(line)--{{{
-  --[[
+  local line = trimRight(line)
+  local account_info = {}
   local pos = 0
-  local account
-  for i = 1, 3 do
-    pipe = string.find(line, '|', pos)
-    if i == 3 then
-      account = string.sub(line, pos, pipe - 1)
-    else
-      pos = pipe + 1
+  while true do
+    local pipe = string.find(line, '|', pos)
+    if not pipe then
+      table.insert(account_info,  string.sub(line, pos))
+      break
     end
+    table.insert(account_info,  string.sub(line, pos, pipe - 1))
+    pos = pipe + 1
   end
-  return account
-  --]]
-  return trimRight(line)
+  return table.unpack(account_info)
 end
 --}}}
 function oneKeyNewPhone()--{{{
@@ -140,7 +139,8 @@ function readOneLine(f)--{{{
   return trimRight(f:read())
 end--}}}
 function main()--{{{
-  local config = io.open('/User/Media/TouchSprite/lua/zfb_config.txt')
+  local path = '/User/Media/TouchSprite/lua/'
+  local config = io.open(path .. 'zfb_config.txt')
   local account_file = readOneLine(config)
   local login_password = readOneLine(config)
   local pay_password = readOneLine(config)
@@ -149,9 +149,9 @@ function main()--{{{
   local dama2 = readOneLine(config)
   config:close()
 
-  local accounts = io.open('/User/Media/TouchSprite/lua/' .. account_file)
-  local accountsGood = io.open('/User/Media/TouchSprite/lua/zfb_good.txt', 'w')
-  local accountsBad = io.open('/User/Media/TouchSprite/lua/zfb_bad.txt', 'w')
+  local accounts = io.open(path .. account_file)
+  local accountsGood = io.open(path .. 'zfb_good.txt', 'w')
+  local accountsBad = io.open(path .. 'zfb_bad.txt', 'w')
   for line in accounts:lines() do
     oneKeyNewPhone()
 
@@ -161,12 +161,18 @@ function main()--{{{
     click1(82, 406)
     click1(397, 879)
 
-    account = readAccount(line)
+    local account, login_password1, pay_password1 = readAccount(line)
+    if not login_password1 then
+      login_password1 = login_password
+    end
+    if not pay_password1 then
+      pay_password1 = pay_password
+    end
     mSleep(1000)
     inputText(account)
     click1(233, 299)
     mSleep(1000)
-    inputText(login_password)
+    inputText(login_password1)
     click1(317, 459)
     mSleep(2000)
     local times = 20
@@ -237,7 +243,7 @@ function main()--{{{
           break
         end
         mSleep(1000)
-        inputText(pay_password)
+        inputText(pay_password1)
         click1(472 ,552) -- pay
         if not doFindColorInRegionFuzzy(0x0baf1a, 100, 29, 159, 90, 218, 30) then
           break
